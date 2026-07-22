@@ -3,20 +3,30 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Maiia Vilhelmsons Interior Design — API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: projects
+    description: Portfolio projects
+  - name: services
+    description: Studio services
+  - name: journal
+    description: Journal / blog posts
+  - name: leads
+    description: Contact / consultation requests
+  - name: site
+    description: Site-wide aggregated data
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +34,347 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ── Projects ─────────────────────────────────────────────────────────────
+  /projects:
+    get:
+      operationId: listProjects
+      tags: [projects]
+      summary: List all projects (optionally filtered)
+      parameters:
+        - name: location
+          in: query
+          schema: { type: string }
+        - name: projectType
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+    post:
+      operationId: createProject
+      tags: [projects]
+      summary: Create a new project (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+  /projects/featured:
+    get:
+      operationId: listFeaturedProjects
+      tags: [projects]
+      summary: List featured projects for the homepage
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+
+  /projects/{slug}:
+    get:
+      operationId: getProject
+      tags: [projects]
+      summary: Get a single project by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateProject
+      tags: [projects]
+      summary: Update a project (admin)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectUpdate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteProject
+      tags: [projects]
+      summary: Delete a project (admin)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+
+  # ── Services ─────────────────────────────────────────────────────────────
+  /services:
+    get:
+      operationId: listServices
+      tags: [services]
+      summary: List all studio services
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Service"
+
+  /services/{slug}:
+    get:
+      operationId: getService
+      tags: [services]
+      summary: Get a single service by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+        "404":
+          description: Not found
+
+  # ── Journal ───────────────────────────────────────────────────────────────
+  /journal:
+    get:
+      operationId: listJournalPosts
+      tags: [journal]
+      summary: List journal posts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JournalPost"
+
+  /journal/{slug}:
+    get:
+      operationId: getJournalPost
+      tags: [journal]
+      summary: Get a journal post by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JournalPost"
+        "404":
+          description: Not found
+
+  # ── Leads ─────────────────────────────────────────────────────────────────
+  /leads:
+    post:
+      operationId: submitLead
+      tags: [leads]
+      summary: Submit a consultation request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadInput"
+      responses:
+        "201":
+          description: Submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+
+  # ── Site summary ──────────────────────────────────────────────────────────
+  /site/summary:
+    get:
+      operationId: getSiteSummary
+      tags: [site]
+      summary: Aggregated site stats for the homepage
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSummary"
+
 components:
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
-        status:
-          type: string
-      required:
-        - status
+        status: { type: string }
 
+    # ── Project ──────────────────────────────────────────────────────────────
+    Project:
+      type: object
+      required: [id, slug, titleEn, titleRu, descriptionEn, descriptionRu, location, projectType, images, featured, displayOrder, createdAt]
+      properties:
+        id: { type: integer }
+        slug: { type: string }
+        titleEn: { type: string }
+        titleRu: { type: string }
+        descriptionEn: { type: string }
+        descriptionRu: { type: string }
+        location: { type: string }
+        projectType: { type: string }
+        images:
+          type: array
+          items: { type: string }
+        featured: { type: boolean }
+        displayOrder: { type: integer }
+        createdAt: { type: string }
+
+    ProjectInput:
+      type: object
+      required: [slug, titleEn, titleRu, descriptionEn, descriptionRu, location, projectType]
+      properties:
+        slug: { type: string }
+        titleEn: { type: string }
+        titleRu: { type: string }
+        descriptionEn: { type: string }
+        descriptionRu: { type: string }
+        location: { type: string }
+        projectType: { type: string }
+        images:
+          type: array
+          items: { type: string }
+        featured: { type: boolean }
+        displayOrder: { type: integer }
+
+    ProjectUpdate:
+      type: object
+      properties:
+        titleEn: { type: string }
+        titleRu: { type: string }
+        descriptionEn: { type: string }
+        descriptionRu: { type: string }
+        location: { type: string }
+        projectType: { type: string }
+        images:
+          type: array
+          items: { type: string }
+        featured: { type: boolean }
+        displayOrder: { type: integer }
+
+    # ── Service ──────────────────────────────────────────────────────────────
+    Service:
+      type: object
+      required: [id, slug, titleEn, titleRu, shortDescEn, shortDescRu, fullDescEn, fullDescRu, displayOrder]
+      properties:
+        id: { type: integer }
+        slug: { type: string }
+        titleEn: { type: string }
+        titleRu: { type: string }
+        shortDescEn: { type: string }
+        shortDescRu: { type: string }
+        fullDescEn: { type: string }
+        fullDescRu: { type: string }
+        displayOrder: { type: integer }
+
+    # ── Journal Post ──────────────────────────────────────────────────────────
+    JournalPost:
+      type: object
+      required: [id, slug, titleEn, titleRu, excerptEn, excerptRu, bodyEn, bodyRu, coverImage, publishedAt, createdAt]
+      properties:
+        id: { type: integer }
+        slug: { type: string }
+        titleEn: { type: string }
+        titleRu: { type: string }
+        excerptEn: { type: string }
+        excerptRu: { type: string }
+        bodyEn: { type: string }
+        bodyRu: { type: string }
+        coverImage: { type: string }
+        publishedAt: { type: string }
+        createdAt: { type: string }
+
+    # ── Lead ─────────────────────────────────────────────────────────────────
+    Lead:
+      type: object
+      required: [id, name, email, projectType, createdAt]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        phone: { type: ["string", "null"] }
+        email: { type: string }
+        projectType: { type: string }
+        message: { type: ["string", "null"] }
+        createdAt: { type: string }
+
+    LeadInput:
+      type: object
+      required: [name, email, projectType]
+      properties:
+        name: { type: string }
+        phone: { type: string }
+        email: { type: string }
+        projectType: { type: string }
+        message: { type: string }
+
+    # ── Site Summary ─────────────────────────────────────────────────────────
+    SiteSummary:
+      type: object
+      required: [totalProjects, totalServices, locations, yearsOfExperience]
+      properties:
+        totalProjects: { type: integer }
+        totalServices: { type: integer }
+        locations:
+          type: array
+          items: { type: string }
+        yearsOfExperience: { type: integer }

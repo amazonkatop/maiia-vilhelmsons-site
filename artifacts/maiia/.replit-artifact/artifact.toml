@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Maiia Vilhelmsons"
+version = "1.0.0"
+id = "artifacts/maiia"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 26071
+
+[services.development]
+run = "pnpm --filter @workspace/maiia run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/maiia", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/maiia/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "26071"
+BASE_PATH = "/"
