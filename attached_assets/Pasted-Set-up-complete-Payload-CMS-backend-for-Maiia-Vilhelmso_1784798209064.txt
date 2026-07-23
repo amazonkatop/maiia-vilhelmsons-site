@@ -1,0 +1,33 @@
+Set up complete Payload CMS backend for Maiia Vilhelmsons site, Postgres DB, Cloudflare R2 media storage.
+
+COLLECTIONS:
+1. Project: title (localized en/ru), slug (auto), location (select: Southampton/East Hampton/Bridgehampton/Sag Harbor/Westhampton Beach), type (select: Waterfront/New Build/Renovation/Coastal Cottage — used for Portfolio filter), featured (bool), description (localized richtext), gallery (Media array), beforeAfter (optional group: before/after Media), seo group (metaTitle, metaDescription — localized, optional/collapsed, not required).
+2. JournalPost: title (localized, manually entered, required), date, coverImage (Media), body (localized richtext), seo group (optional/collapsed).
+3. Service: title (localized), slug, description (localized richtext), process steps (array: step name + description, localized).
+4. Media: R2 upload adapter. beforeChange hook: process every upload through sharp — apply one consistent warm/muted tone-grade matching site palette, no per-upload config. Field: alt (localized, required).
+
+GLOBALS (singleton, localized en/ru, all editable via /admin with Live Preview):
+1. HomePage:
+   - hero: headline, subheadline, backgroundImage
+   - aboutDesigner: eyebrow, name, bio (richtext), photo
+   - aboutStudio: text (richtext), photo
+   - pressLogos: array of { logo image, sourceName, publicationUrl }
+   - cta: text, phone
+2. AboutPage: studioHistory (richtext), philosophyText (richtext), teamPhotos (array), awards (array: title + year + description).
+3. SiteSettings: officeAddress, phone, email, instagramUrl, pinterestUrl.
+
+MIGRATION: Move existing hardcoded AboutDesigner and AboutStudio content from messages/en.json and messages/ru.json into HomePage global fields above. Update corresponding components to fetch from Payload (locale-aware) instead of next-intl. Keep UI chrome (button labels, nav, filter labels) in next-intl unchanged.
+
+LIVE PREVIEW: enable on HomePage, AboutPage, Project, JournalPost — real site rendered live in iframe next to edit form. Group fields visually to match on-page block order (Hero, About Designer, About Studio, Press, CTA), not a flat field list.
+
+ROLES: Admin (full access incl. settings/users) and Editor (full read/write on Project, JournalPost, Service, Media, and all Globals; no access to Payload settings/users). Editor's admin dashboard shows Project and JournalPost as primary quick-add actions.
+
+LOCALIZATION: Payload locales en (default) and ru enabled on all fields marked localized above.
+
+FRONTEND WIRING:
+- Confirm root "/" always redirects to "/en" by default; locale switch only via user action in Nav.
+- Wire all pages (Home, Portfolio, Portfolio/[slug], About, Services/[slug], Journal, Journal/[slug], Contact) to pull content from these Collections/Globals, locale-aware, replacing any remaining hardcoded placeholder text.
+- Confirm all page content is rendered via Server Components (present in initial server-rendered HTML), not client-side-only fetch.
+- Press Logos section: logo links to publicationUrl, opens in new tab.
+
+At the end, output a checklist of what's implemented and what remains manual (real photos, final copywriting, domain, production VPS hosting for Payload, Google Business Profile widget, Journal categories/tags — none of these built in this step).
