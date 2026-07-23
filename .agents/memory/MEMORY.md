@@ -1,0 +1,4 @@
+- [Date serialization in API routes](date-serialization.md) — Drizzle returns Date objects; all route handlers must call serializeDates() before Zod parsing.
+- [Featured route order](featured-route-order.md) — /api/projects/featured must stay registered before /api/projects/:slug or Express matches the slug first.
+- [Frontend image paths](frontend-images.md) — AI-generated placeholder images live in artifacts/maiia/public/images/; DB paths must match actual filenames there.
+- [Codegen workflow](codegen-workflow.md) — Any change to lib/api-spec/openapi.yaml requires running pnpm --filter @workspace/api-spec run codegen to update hooks and Zod schemas.
