@@ -50,7 +50,23 @@ const translations = {
   // Types
   'type.residential': { en: 'Residential', ru: 'Жилой' },
   'type.commercial': { en: 'Commercial', ru: 'Коммерческий' },
-  'type.hospitality': { en: 'Hospitality', ru: 'Гостеприимство' }
+  'type.hospitality': { en: 'Hospitality', ru: 'Гостеприимство' },
+
+  // About Designer (home page section)
+  // TODO: Replace placeholder copy with final approved text
+  'aboutDesigner.eyebrow': { en: 'Principal Designer', ru: 'Главный дизайнер' },
+  'aboutDesigner.bio1': {
+    en: 'Maiia Vilhelmsons has spent more than twelve years designing high-end residences along the East Coast, with a particular focus on the Hamptons and Manhattan.',
+    ru: 'Майя Вильхельмсонс более двенадцати лет занимается дизайном элитных резиденций на Восточном побережье США, уделяя особое внимание Хэмптонсу и Манхэттену.'
+  },
+  'aboutDesigner.bio2': {
+    en: 'Trained in classical architecture in Stockholm and at Parsons School of Design in New York, she brings a rigorous, architecturally grounded eye to every commission — balancing proportion, material, and the particular quality of coastal light.',
+    ru: 'Получив классическое архитектурное образование в Стокгольме и в Школе дизайна Парсонс в Нью-Йорке, она привносит в каждый проект строгий, архитектурно выверенный взгляд — балансируя пропорции, материалы и особое качество прибрежного света.'
+  },
+  'aboutDesigner.bio3': {
+    en: 'Her work is guided by the belief that a home should feel inevitable — as if it could not have been otherwise.',
+    ru: 'Её работу направляет убеждение: дом должен казаться неизбежным — таким, каким он и должен был быть.'
+  }
 } as const;
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);

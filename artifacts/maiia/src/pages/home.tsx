@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { useLocale } from '../contexts/LocaleContext';
 import { PageTransition, FadeIn } from '../components/Animations';
 import { PressLogos } from '../components/PressLogos';
+import { AboutDesigner } from '../components/AboutDesigner';
 import { 
   useGetSiteSummary, 
   useListFeaturedProjects, 
@@ -83,6 +84,9 @@ export default function Home() {
 
       {/* Press Logos */}
       <PressLogos locale={locale} />
+
+      {/* About Designer */}
+      <AboutDesigner />
 
       {/* Studio Philosophy Block */}
       <section className="py-32 bg-white">
