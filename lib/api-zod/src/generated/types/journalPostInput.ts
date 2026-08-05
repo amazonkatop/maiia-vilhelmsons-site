@@ -6,8 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface JournalPost {
-  id: number;
+export interface JournalPostInput {
   slug: string;
   titleEn: string;
   titleRu: string;
@@ -15,7 +14,6 @@ export interface JournalPost {
   excerptRu: string;
   bodyEn: string;
   bodyRu: string;
-  coverImage: string;
-  publishedAt: string;
-  createdAt: string;
+  coverImage?: string;
+  publishedAt?: string;
 }

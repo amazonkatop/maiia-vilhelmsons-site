@@ -208,8 +208,9 @@ async function createServer() {
 }
 
 createServer().then((app) => {
-  app.listen(port, '0.0.0.0', () => {
+  const host = process.env.HOST || '0.0.0.0';
+  app.listen(port, host, () => {
     // eslint-disable-next-line no-console
-    console.log(`SSR server listening on port ${port} (base: ${base})`);
+    console.log(`SSR server listening on http://${host}:${port} (base: ${base})`);
   });
 });

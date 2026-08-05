@@ -6,16 +6,13 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface JournalPost {
-  id: number;
+export interface ServiceInput {
   slug: string;
   titleEn: string;
   titleRu: string;
-  excerptEn: string;
-  excerptRu: string;
-  bodyEn: string;
-  bodyRu: string;
-  coverImage: string;
-  publishedAt: string;
-  createdAt: string;
+  shortDescEn: string;
+  shortDescRu: string;
+  fullDescEn: string;
+  fullDescRu: string;
+  displayOrder?: number;
 }

@@ -2,7 +2,7 @@ import { Link, useParams } from 'wouter';
 import { useLocale } from '../../contexts/LocaleContext';
 import { PageTransition, FadeIn } from '../../components/Animations';
 import { Lightbox } from '../../components/Lightbox';
-import { useGetProject, useListProjects } from '@workspace/api-client-react';
+import { useGetProject, useListProjects, getGetProjectQueryKey } from '@workspace/api-client-react';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
@@ -38,7 +38,7 @@ export default function ProjectDetail() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   
   const { data: project, isLoading } = useGetProject(slug, {
-    query: { enabled: !!slug }
+    query: { queryKey: getGetProjectQueryKey(slug), enabled: !!slug }
   });
 
   const { data: allProjects } = useListProjects();

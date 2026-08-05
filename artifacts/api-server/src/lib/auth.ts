@@ -33,7 +33,8 @@ export function signSessionToken(payload: SessionPayload): string {
 
 export function verifySessionToken(token: string): SessionPayload | null {
   try {
-    return jwt.verify(token, getSecret()) as SessionPayload;
+    const payload = jwt.verify(token, getSecret()) as unknown;
+    return payload as SessionPayload;
   } catch {
     return null;
   }

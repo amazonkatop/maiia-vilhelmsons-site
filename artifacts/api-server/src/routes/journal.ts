@@ -33,7 +33,14 @@ router.post("/journal", requireAuth, requireRole("admin", "editor"), async (req,
     res.status(400).json({ error: body.error.message });
     return;
   }
-  const [created] = await db.insert(journalPostsTable).values(body.data).returning();
+  const { publishedAt, ...rest } = body.data;
+  const [created] = await db
+    .insert(journalPostsTable)
+    .values({
+      ...rest,
+      ...(publishedAt !== undefined ? { publishedAt: new Date(publishedAt) } : {}),
+    })
+    .returning();
   res.status(201).json(CreateJournalPostResponse.parse(serializeDates(created)));
 });
 
@@ -67,9 +74,13 @@ router.patch("/journal/:slug", requireAuth, requireRole("admin", "editor"), asyn
     res.status(400).json({ error: body.error.message });
     return;
   }
+  const { publishedAt, ...rest } = body.data;
   const [updated] = await db
     .update(journalPostsTable)
-    .set(body.data)
+    .set({
+      ...rest,
+      ...(publishedAt !== undefined ? { publishedAt: new Date(publishedAt) } : {}),
+    })
     .where(eq(journalPostsTable.slug, params.data.slug))
     .returning();
   if (!updated) {

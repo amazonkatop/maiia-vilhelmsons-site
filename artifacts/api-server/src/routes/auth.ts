@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { z } from "zod/v4";
+import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { db, adminUsersTable } from "@workspace/db";
 import { hashPassword, verifyPassword, signSessionToken } from "../lib/auth";

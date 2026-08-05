@@ -1,7 +1,7 @@
 import { Link, useParams } from 'wouter';
 import { useLocale } from '../../contexts/LocaleContext';
 import { PageTransition, FadeIn } from '../../components/Animations';
-import { useGetJournalPost } from '@workspace/api-client-react';
+import { useGetJournalPost, getGetJournalPostQueryKey } from '@workspace/api-client-react';
 import { ArrowLeft } from 'lucide-react';
 
 function SkeletonArticle() {
@@ -31,7 +31,7 @@ export default function JournalDetail() {
   const slug = params.slug || '';
   
   const { data: post, isLoading } = useGetJournalPost(slug, {
-    query: { enabled: !!slug }
+    query: { queryKey: getGetJournalPostQueryKey(slug), enabled: !!slug }
   });
 
   if (isLoading) return <SkeletonArticle />;

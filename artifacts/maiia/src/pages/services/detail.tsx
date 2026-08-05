@@ -2,7 +2,7 @@ import { Link, useParams } from 'wouter';
 import { useLocale } from '../../contexts/LocaleContext';
 import { PageTransition, FadeIn } from '../../components/Animations';
 import { ServiceProcess } from '../../components/ServiceProcess';
-import { useGetService } from '@workspace/api-client-react';
+import { useGetService, getGetServiceQueryKey } from '@workspace/api-client-react';
 import { ArrowLeft } from 'lucide-react';
 
 function SkeletonDetail() {
@@ -29,7 +29,7 @@ export default function ServiceDetail() {
   const slug = params.slug || '';
   
   const { data: service, isLoading } = useGetService(slug, {
-    query: { enabled: !!slug }
+    query: { queryKey: getGetServiceQueryKey(slug), enabled: !!slug }
   });
 
   if (isLoading) return <SkeletonDetail />;

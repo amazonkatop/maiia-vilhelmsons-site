@@ -6,14 +6,13 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface ProjectUpdate {
+export interface JournalPostUpdate {
   titleEn?: string;
   titleRu?: string;
-  descriptionEn?: string;
-  descriptionRu?: string;
-  location?: string;
-  projectType?: string;
-  images?: string[];
-  featured?: boolean;
-  displayOrder?: number;
+  excerptEn?: string;
+  excerptRu?: string;
+  bodyEn?: string;
+  bodyRu?: string;
+  coverImage?: string;
+  publishedAt?: string;
 }

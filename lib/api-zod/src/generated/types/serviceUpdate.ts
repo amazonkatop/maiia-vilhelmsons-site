@@ -6,14 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface ProjectUpdate {
+export interface ServiceUpdate {
   titleEn?: string;
   titleRu?: string;
-  descriptionEn?: string;
-  descriptionRu?: string;
-  location?: string;
-  projectType?: string;
-  images?: string[];
-  featured?: boolean;
+  shortDescEn?: string;
+  shortDescRu?: string;
+  fullDescEn?: string;
+  fullDescRu?: string;
   displayOrder?: number;
 }
