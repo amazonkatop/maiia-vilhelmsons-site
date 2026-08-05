@@ -2,6 +2,7 @@ import { Router } from "express";
 import { eq, and, asc } from "drizzle-orm";
 import { db, projectsTable } from "@workspace/db";
 import { serializeDates } from "../lib/serialize";
+import { requireAuth, requireRole } from "../middlewares/auth";
 import {
   ListProjectsQueryParams,
   ListProjectsResponse,
@@ -46,8 +47,8 @@ router.get("/projects", async (req, res): Promise<void> => {
   res.json(ListProjectsResponse.parse(serializeDates(rows)));
 });
 
-// POST /projects
-router.post("/projects", async (req, res): Promise<void> => {
+// POST /projects — Admin or Editor
+router.post("/projects", requireAuth, requireRole("admin", "editor"), async (req, res): Promise<void> => {
   const body = CreateProjectBody.safeParse(req.body);
   if (!body.success) {
     res.status(400).json({ error: body.error.message });
@@ -75,8 +76,8 @@ router.get("/projects/:slug", async (req, res): Promise<void> => {
   res.json(GetProjectResponse.parse(serializeDates(row)));
 });
 
-// PATCH /projects/:slug
-router.patch("/projects/:slug", async (req, res): Promise<void> => {
+// PATCH /projects/:slug — Admin or Editor
+router.patch("/projects/:slug", requireAuth, requireRole("admin", "editor"), async (req, res): Promise<void> => {
   const params = UpdateProjectParams.safeParse(req.params);
   if (!params.success) {
     res.status(400).json({ error: params.error.message });
@@ -99,8 +100,8 @@ router.patch("/projects/:slug", async (req, res): Promise<void> => {
   res.json(UpdateProjectResponse.parse(serializeDates(updated)));
 });
 
-// DELETE /projects/:slug
-router.delete("/projects/:slug", async (req, res): Promise<void> => {
+// DELETE /projects/:slug — Admin or Editor
+router.delete("/projects/:slug", requireAuth, requireRole("admin", "editor"), async (req, res): Promise<void> => {
   const params = DeleteProjectParams.safeParse(req.params);
   if (!params.success) {
     res.status(400).json({ error: params.error.message });

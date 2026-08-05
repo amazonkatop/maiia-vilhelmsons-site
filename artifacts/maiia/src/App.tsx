@@ -1,4 +1,5 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
@@ -16,15 +17,6 @@ import ServiceDetail from './pages/services/detail';
 import Journal from './pages/journal';
 import JournalDetail from './pages/journal/detail';
 import Contact from './pages/contact';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000,
-    },
-  },
-});
 
 function Router() {
   return (
@@ -71,11 +63,20 @@ function Router() {
   );
 }
 
-function App() {
+interface AppProps {
+  queryClient: QueryClient;
+  /** Set only during SSR: the URL wouter should treat as "current". */
+  ssrPath?: string;
+}
+
+function App({ queryClient, ssrPath }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+        <WouterRouter
+          base={import.meta.env.BASE_URL.replace(/\/$/, '')}
+          ssrPath={ssrPath}
+        >
           <LocaleProvider>
             <Router />
           </LocaleProvider>

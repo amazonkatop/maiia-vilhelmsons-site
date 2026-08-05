@@ -4,12 +4,24 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --config vite.config.ts --host 0.0.0.0",
-    "build": "vite build --config vite.config.ts",
-    "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
+    "dev": "tsx server.ts",
+    "build:client": "vite build --config vite.config.ts --outDir dist/client",
+    "build:server": "vite build --config vite.config.ts --ssr src/entry-server.tsx --outDir dist/server",
+    "build": "pnpm run build:client && pnpm run build:server",
+    "start": "cross-env NODE_ENV=production tsx server.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "compression": "^1.7.5",
+    "sirv": "^3.0.0",
+    "cross-env": "^7.0.3",
+    "tsx": "catalog:"
+  },
   "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/compression": "^1.7.5",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.4",
     "@radix-ui/react-alert-dialog": "^1.1.7",

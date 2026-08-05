@@ -50,14 +50,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, 'src'),
-      '@assets': path.resolve(
-        import.meta.dirname,
-        '..',
-        '..',
-        'attached_assets',
-      ),
     },
     dedupe: ['react', 'react-dom'],
+  },
+  ssr: {
+    // Force these ESM-only packages to be bundled into the SSR output
+    // rather than left as bare `require()` calls (which would fail on
+    // packages that don't ship a CJS build). If the production SSR
+    // build fails with an ERR_REQUIRE_ESM-style error on some other
+    // package, add its name to this list too.
+    noExternal: ['wouter', 'framer-motion'],
   },
   root: path.resolve(import.meta.dirname),
   build: {

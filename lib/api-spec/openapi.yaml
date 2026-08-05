@@ -161,6 +161,23 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Service"
+    post:
+      operationId: createService
+      tags: [services]
+      summary: Create a new service (admin/editor)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
 
   /services/{slug}:
     get:
@@ -181,6 +198,44 @@ paths:
                 $ref: "#/components/schemas/Service"
         "404":
           description: Not found
+    patch:
+      operationId: updateService
+      tags: [services]
+      summary: Update a service (admin/editor)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceUpdate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteService
+      tags: [services]
+      summary: Delete a service (admin/editor)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
 
   # ── Journal ───────────────────────────────────────────────────────────────
   /journal:
@@ -197,6 +252,23 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/JournalPost"
+    post:
+      operationId: createJournalPost
+      tags: [journal]
+      summary: Create a new journal post (admin/editor)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JournalPostInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JournalPost"
 
   /journal/{slug}:
     get:
@@ -215,6 +287,44 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/JournalPost"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateJournalPost
+      tags: [journal]
+      summary: Update a journal post (admin/editor)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JournalPostUpdate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JournalPost"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteJournalPost
+      tags: [journal]
+      summary: Delete a journal post (admin/editor)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
         "404":
           description: Not found
 
@@ -327,6 +437,30 @@ components:
         fullDescRu: { type: string }
         displayOrder: { type: integer }
 
+    ServiceInput:
+      type: object
+      required: [slug, titleEn, titleRu, shortDescEn, shortDescRu, fullDescEn, fullDescRu]
+      properties:
+        slug: { type: string }
+        titleEn: { type: string }
+        titleRu: { type: string }
+        shortDescEn: { type: string }
+        shortDescRu: { type: string }
+        fullDescEn: { type: string }
+        fullDescRu: { type: string }
+        displayOrder: { type: integer }
+
+    ServiceUpdate:
+      type: object
+      properties:
+        titleEn: { type: string }
+        titleRu: { type: string }
+        shortDescEn: { type: string }
+        shortDescRu: { type: string }
+        fullDescEn: { type: string }
+        fullDescRu: { type: string }
+        displayOrder: { type: integer }
+
     # ── Journal Post ──────────────────────────────────────────────────────────
     JournalPost:
       type: object
@@ -343,6 +477,32 @@ components:
         coverImage: { type: string }
         publishedAt: { type: string }
         createdAt: { type: string }
+
+    JournalPostInput:
+      type: object
+      required: [slug, titleEn, titleRu, excerptEn, excerptRu, bodyEn, bodyRu]
+      properties:
+        slug: { type: string }
+        titleEn: { type: string }
+        titleRu: { type: string }
+        excerptEn: { type: string }
+        excerptRu: { type: string }
+        bodyEn: { type: string }
+        bodyRu: { type: string }
+        coverImage: { type: string }
+        publishedAt: { type: string }
+
+    JournalPostUpdate:
+      type: object
+      properties:
+        titleEn: { type: string }
+        titleRu: { type: string }
+        excerptEn: { type: string }
+        excerptRu: { type: string }
+        bodyEn: { type: string }
+        bodyRu: { type: string }
+        coverImage: { type: string }
+        publishedAt: { type: string }
 
     # ── Lead ─────────────────────────────────────────────────────────────────
     Lead:

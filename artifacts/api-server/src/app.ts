@@ -1,5 +1,6 @@
 import express, { type Express } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import pinoHttp from "pino-http";
 import router from "./routes";
 import { logger } from "./lib/logger";
@@ -25,7 +26,15 @@ app.use(
     },
   }),
 );
-app.use(cors());
+app.use(
+  cors({
+    // Comma-separated list of allowed frontend origins, e.g.
+    // "https://maiiavilhelmsons.com,http://localhost:5173"
+    origin: (process.env.CORS_ORIGIN || "http://localhost:5173").split(","),
+    credentials: true, // required for the session cookie to be sent/received cross-origin
+  }),
+);
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

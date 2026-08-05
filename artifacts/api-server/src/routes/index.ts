@@ -5,10 +5,12 @@ import servicesRouter from "./services";
 import journalRouter from "./journal";
 import leadsRouter from "./leads";
 import siteRouter from "./site";
+import authRouter from "./auth";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
+router.use(authRouter);
 router.use(projectsRouter);
 router.use(servicesRouter);
 router.use(journalRouter);
