@@ -8,7 +8,25 @@ if (Number.isNaN(port) || port <= 0) {
   throw new Error(`Invalid PORT value: "${process.env.PORT}"`);
 }
 
-const basePath = process.env.BASE_PATH || '/';
+/**
+ * Vite `base` must be an absolute URL path. On Windows, Git Bash/MSYS
+ * rewrites a lone "/" env value into the Git install path
+ * (e.g. "/Program Files/Git/"), which breaks SSR routing.
+ */
+function resolveBasePath(): string {
+  const raw = process.env.BASE_PATH || '/';
+  if (
+    !raw.startsWith('/') ||
+    raw.includes('Program Files') ||
+    raw.includes('Program%20Files') ||
+    /\/Git\/?$/i.test(raw)
+  ) {
+    return '/';
+  }
+  return raw.endsWith('/') ? raw : `${raw}/`;
+}
+
+const basePath = resolveBasePath();
 const host = process.env.HOST || '0.0.0.0';
 
 export default defineConfig({

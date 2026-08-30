@@ -43,6 +43,18 @@ async function prefetchForPath(queryClient: QueryClient, path: string) {
       queryClient.prefetchQuery(getListFeaturedProjectsQueryOptions()),
       queryClient.prefetchQuery(getListServicesQueryOptions()),
       queryClient.prefetchQuery(getListJournalPostsQueryOptions()),
+      queryClient.prefetchQuery({
+        queryKey: ['homepage'],
+        queryFn: async () => {
+          const base = (process.env.API_BASE_URL || 'http://localhost:8080').replace(
+            /\/+$/,
+            '',
+          );
+          const res = await fetch(`${base}/api/homepage`);
+          if (!res.ok) throw new Error(`homepage ${res.status}`);
+          return res.json();
+        },
+      }),
     );
   } else if (withoutLocale === '/portfolio') {
     tasks.push(queryClient.prefetchQuery(getListProjectsQueryOptions()));

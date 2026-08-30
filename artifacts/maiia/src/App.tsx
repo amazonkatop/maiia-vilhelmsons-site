@@ -100,14 +100,24 @@ interface AppProps {
   ssrPath?: string;
 }
 
+/** Sanitize Vite BASE_URL — MSYS can rewrite "/" to the Git install path. */
+function routerBase(): string {
+  const raw = import.meta.env.BASE_URL || '/';
+  if (
+    !raw.startsWith('/') ||
+    raw.includes('Program') ||
+    /Git/i.test(raw)
+  ) {
+    return '';
+  }
+  return raw.replace(/\/$/, '');
+}
+
 function App({ queryClient, ssrPath }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WouterRouter
-          base={import.meta.env.BASE_URL.replace(/\/$/, '')}
-          ssrPath={ssrPath}
-        >
+        <WouterRouter base={routerBase()} ssrPath={ssrPath}>
           <LocaleProvider>
             <Router />
           </LocaleProvider>
