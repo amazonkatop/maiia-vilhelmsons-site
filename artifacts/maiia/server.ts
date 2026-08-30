@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import express from 'express';
 import type { PageMeta } from './src/lib/seo';
 
@@ -180,8 +181,13 @@ async function createServer() {
           path.resolve(clientOutDir, 'index.html'),
           'utf-8',
         );
-        render = (await import(path.resolve(serverOutDir, 'entry-server.js')))
-          .render;
+        // pathToFileURL is required on Windows: bare absolute paths like
+        // `C:\...` are rejected by ESM import (ERR_UNSUPPORTED_ESM_URL_SCHEME).
+        render = (
+          await import(
+            pathToFileURL(path.resolve(serverOutDir, 'entry-server.js')).href
+          )
+        ).render;
       }
 
       const { html: appHtml, dehydratedState, meta } = await render(url);
