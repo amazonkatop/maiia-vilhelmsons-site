@@ -1,4 +1,5 @@
 import { Link } from 'wouter';
+import { useQuery } from '@tanstack/react-query';
 import { useLocale } from '../contexts/LocaleContext';
 import { PageTransition, FadeIn } from '../components/Animations';
 import { PressLogos } from '../components/PressLogos';
@@ -11,6 +12,10 @@ import {
 } from '@workspace/api-client-react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import {
+  getHomepageContent,
+  localizedHomepageField,
+} from '../lib/homepage-content';
 
 export default function Home() {
   const { locale, t, l } = useLocale();
@@ -19,6 +24,49 @@ export default function Home() {
   const { data: featuredProjects } = useListFeaturedProjects();
   const { data: services } = useListServices();
   const { data: journalPosts } = useListJournalPosts();
+  const { data: homepage } = useQuery({
+    queryKey: ['homepage'],
+    queryFn: getHomepageContent,
+  });
+
+  const heroImage = homepage?.heroImage || '/images/hero.jpg';
+  const heroEyebrow = localizedHomepageField(
+    homepage,
+    locale,
+    'heroEyebrow',
+    'Interior Architecture & Design · New York',
+  );
+  const heroHeadline = localizedHomepageField(
+    homepage,
+    locale,
+    'heroHeadline',
+    locale === 'en'
+      ? 'Timeless interiors for coastal living'
+      : 'Интерьеры вне времени для жизни у воды',
+  );
+  const studioImage = homepage?.studioImage || '/images/journal-2.jpg';
+  const studioEyebrow = localizedHomepageField(
+    homepage,
+    locale,
+    'studioEyebrow',
+    locale === 'en' ? 'The Studio' : 'Студия',
+  );
+  const studioHeadline = localizedHomepageField(
+    homepage,
+    locale,
+    'studioHeadline',
+    locale === 'en'
+      ? 'Luxury found in restraint, not abundance.'
+      : 'Роскошь, найденная в сдержанности, а не в изобилии.',
+  );
+  const studioBody = localizedHomepageField(
+    homepage,
+    locale,
+    'studioBody',
+    locale === 'en'
+      ? 'We create environments that whisper rather than shout — spaces defined by natural light, tactile materials, and uncompromising attention to detail. Each home is a deeply personal collaboration, resulting in rooms that feel both curated and effortless.'
+      : 'Мы создаём пространства, которые говорят шёпотом, а не кричат — интерьеры, определённые естественным светом, тактильными материалами и бескомпромиссным вниманием к деталям. Каждый дом — это глубоко личное сотрудничество, результатом которого становятся комнаты, ощущающиеся одновременно продуманными и лёгкими.',
+  );
 
   return (
     <PageTransition>
@@ -26,8 +74,8 @@ export default function Home() {
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
           <img 
-            src="/images/hero.jpg" 
-            alt="Maiia Vilhelmsons — Hamptons interior"
+            src={heroImage} 
+            alt="Maiia Vilhelmsons — New York and Hamptons interior architecture"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/30" />
@@ -40,7 +88,7 @@ export default function Home() {
             transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
             className="text-xs tracking-[0.3em] uppercase font-light mb-8 text-white/70"
           >
-            Interior Architecture & Design
+            {heroEyebrow}
           </motion.p>
           <motion.h1 
             initial={{ opacity: 0, y: 24 }}
@@ -48,9 +96,7 @@ export default function Home() {
             transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-wide mb-8 leading-tight"
           >
-            {locale === 'en'
-              ? 'Timeless interiors for coastal living'
-              : 'Интерьеры вне времени для жизни у воды'}
+            {heroHeadline}
           </motion.h1>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -94,17 +140,13 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
             <FadeIn>
               <p className="text-xs tracking-[0.3em] uppercase text-accent mb-8">
-                {locale === 'en' ? 'The Studio' : 'Студия'}
+                {studioEyebrow}
               </p>
               <h2 className="text-4xl md:text-5xl font-serif mb-10 leading-tight">
-                {locale === 'en'
-                  ? 'Luxury found in restraint, not abundance.'
-                  : 'Роскошь, найденная в сдержанности, а не в изобилии.'}
+                {studioHeadline}
               </h2>
               <p className="text-lg font-light text-foreground/70 leading-relaxed mb-8">
-                {locale === 'en'
-                  ? 'We create environments that whisper rather than shout — spaces defined by natural light, tactile materials, and uncompromising attention to detail. Each home is a deeply personal collaboration, resulting in rooms that feel both curated and effortless.'
-                  : 'Мы создаём пространства, которые говорят шёпотом, а не кричат — интерьеры, определённые естественным светом, тактильными материалами и бескомпромиссным вниманием к деталям. Каждый дом — это глубоко личное сотрудничество, результатом которого становятся комнаты, ощущающиеся одновременно продуманными и лёгкими.'}
+                {studioBody}
               </p>
               <Link
                 href={`/${locale}/about`}
@@ -116,8 +158,8 @@ export default function Home() {
             <FadeIn delay={0.15}>
               <div className="aspect-[3/4] bg-muted overflow-hidden">
                 <img
-                  src="/images/journal-2.jpg"
-                  alt="Maiia Vilhelmsons — studio"
+                  src={studioImage}
+                  alt="Maiia Vilhelmsons studio — New York interior architecture"
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />

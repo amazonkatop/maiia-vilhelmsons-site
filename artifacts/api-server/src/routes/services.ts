@@ -2,6 +2,7 @@ import { Router } from "express";
 import { eq, asc } from "drizzle-orm";
 import { db, servicesTable } from "@workspace/db";
 import { requireAuth, requireRole } from "../middlewares/auth";
+import { translateEnToRu } from "../lib/translate";
 import {
   ListServicesResponse,
   CreateServiceBody,
@@ -16,6 +17,27 @@ import {
 
 const router = Router();
 
+async function withTranslatedServiceRu<T extends {
+  titleEn?: string;
+  shortDescEn?: string;
+  fullDescEn?: string;
+  titleRu?: string;
+  shortDescRu?: string;
+  fullDescRu?: string;
+}>(data: T): Promise<T> {
+  const next = { ...data };
+  if (typeof next.titleEn === "string" && next.titleEn.trim()) {
+    next.titleRu = await translateEnToRu(next.titleEn);
+  }
+  if (typeof next.shortDescEn === "string" && next.shortDescEn.trim()) {
+    next.shortDescRu = await translateEnToRu(next.shortDescEn);
+  }
+  if (typeof next.fullDescEn === "string" && next.fullDescEn.trim()) {
+    next.fullDescRu = await translateEnToRu(next.fullDescEn);
+  }
+  return next;
+}
+
 // GET /services
 router.get("/services", async (req, res): Promise<void> => {
   const rows = await db
@@ -25,15 +47,25 @@ router.get("/services", async (req, res): Promise<void> => {
   res.json(ListServicesResponse.parse(rows));
 });
 
-// POST /services — Admin or Editor
+// POST /services — Admin or Editor (RU auto-translated from EN)
 router.post("/services", requireAuth, requireRole("admin", "editor"), async (req, res): Promise<void> => {
-  const body = CreateServiceBody.safeParse(req.body);
+  const raw = { ...req.body };
+  if (!raw.titleRu) raw.titleRu = raw.titleEn ?? "";
+  if (!raw.shortDescRu) raw.shortDescRu = raw.shortDescEn ?? "";
+  if (!raw.fullDescRu) raw.fullDescRu = raw.fullDescEn ?? "";
+  const body = CreateServiceBody.safeParse(raw);
   if (!body.success) {
     res.status(400).json({ error: body.error.message });
     return;
   }
-  const [created] = await db.insert(servicesTable).values(body.data).returning();
-  res.status(201).json(CreateServiceResponse.parse(created));
+  try {
+    const values = await withTranslatedServiceRu(body.data);
+    const [created] = await db.insert(servicesTable).values(values).returning();
+    res.status(201).json(CreateServiceResponse.parse(created));
+  } catch (err) {
+    console.error("[services] create translate failed:", err);
+    res.status(500).json({ error: "Translation failed while saving service" });
+  }
 });
 
 // GET /services/:slug
@@ -54,7 +86,7 @@ router.get("/services/:slug", async (req, res): Promise<void> => {
   res.json(GetServiceResponse.parse(row));
 });
 
-// PATCH /services/:slug — Admin or Editor
+// PATCH /services/:slug — Admin or Editor (RU auto-translated from EN)
 router.patch("/services/:slug", requireAuth, requireRole("admin", "editor"), async (req, res): Promise<void> => {
   const params = UpdateServiceParams.safeParse(req.params);
   if (!params.success) {
@@ -66,16 +98,22 @@ router.patch("/services/:slug", requireAuth, requireRole("admin", "editor"), asy
     res.status(400).json({ error: body.error.message });
     return;
   }
-  const [updated] = await db
-    .update(servicesTable)
-    .set(body.data)
-    .where(eq(servicesTable.slug, params.data.slug))
-    .returning();
-  if (!updated) {
-    res.status(404).json({ error: "Not found" });
-    return;
+  try {
+    const values = await withTranslatedServiceRu(body.data);
+    const [updated] = await db
+      .update(servicesTable)
+      .set(values)
+      .where(eq(servicesTable.slug, params.data.slug))
+      .returning();
+    if (!updated) {
+      res.status(404).json({ error: "Not found" });
+      return;
+    }
+    res.json(UpdateServiceResponse.parse(updated));
+  } catch (err) {
+    console.error("[services] update translate failed:", err);
+    res.status(500).json({ error: "Translation failed while saving service" });
   }
-  res.json(UpdateServiceResponse.parse(updated));
 });
 
 // DELETE /services/:slug — Admin or Editor
