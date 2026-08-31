@@ -15,8 +15,8 @@ export default function Services() {
           <h1 className="text-5xl md:text-7xl font-serif mb-16">{t('nav.services')}</h1>
           <p className="text-xl font-light text-foreground/70 max-w-2xl mb-24 leading-relaxed">
             {locale === 'en' 
-              ? 'We offer comprehensive interior architecture and design services, managing every detail from initial concept through final installation.'
-              : 'Мы предлагаем комплексные услуги по архитектуре и дизайну интерьера, управляя каждой деталью от первоначальной концепции до финальной реализации.'}
+              ? 'Our approach to interior architecture spans concept, construction documentation, and bespoke styling — serving luxury homeowners in Manhattan, Brooklyn, and the Hamptons from first consultation through final installation.'
+              : 'Наш подход к архитектуре интерьера охватывает концепцию, строительную документацию и авторское оформление — для владельцев роскошной недвижимости на Манхэттене, в Бруклине и Хэмптонс от первой консультации до финальной реализации.'}
           </p>
         </FadeIn>
 

@@ -3,6 +3,7 @@ import { useLocale } from '../../contexts/LocaleContext';
 import { PageTransition, FadeIn } from '../../components/Animations';
 import { useGetJournalPost, getGetJournalPostQueryKey } from '@workspace/api-client-react';
 import { ArrowLeft } from 'lucide-react';
+import { renderJournalBody } from '../../components/JournalBody';
 
 function SkeletonArticle() {
   return (
@@ -103,11 +104,7 @@ export default function JournalDetail() {
       <div className="container mx-auto px-6 max-w-3xl">
         <FadeIn delay={0.15}>
           <div className="space-y-7">
-            {l(post, 'body').split('\n\n').map((paragraph: string, i: number) => (
-              <p key={i} className="text-lg font-light text-foreground/80 leading-[1.85]">
-                {paragraph}
-              </p>
-            ))}
+            {renderJournalBody(l(post, 'body'))}
           </div>
         </FadeIn>
 

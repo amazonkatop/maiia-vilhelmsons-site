@@ -64,8 +64,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="hidden lg:flex items-center gap-8">
-            <a href="tel:+1-631-555-0100" className="text-sm font-medium hover:text-accent transition-colors duration-300">
-              +1 631 555 0100
+            <a href="tel:+19296001851" className="text-sm font-medium hover:text-accent transition-colors duration-300">
+              +1 929 600 1851
             </a>
             <button 
               onClick={toggleLocale}
@@ -116,8 +116,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               transition={{ delay: 0.4 }}
               className="mt-auto mb-12 flex flex-col gap-6"
             >
-              <a href="tel:+1-631-555-0100" className="text-xl font-serif">
-                +1 631 555 0100
+              <a href="tel:+19296001851" className="text-xl font-serif">
+                +1 929 600 1851
               </a>
               <button 
                 onClick={toggleLocale}
@@ -152,15 +152,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <a href="mailto:studio@maiiavilhelmsons.com" className="hover:text-accent transition-colors w-fit">
                 studio@maiiavilhelmsons.com
               </a>
-              <a href="tel:+1-631-555-0100" className="hover:text-accent transition-colors w-fit">
-                +1 631 555 0100
+              <a href="tel:+19296001851" className="hover:text-accent transition-colors w-fit">
+                +1 929 600 1851
               </a>
             </div>
           </div>
           <div>
             <h4 className="font-serif text-lg tracking-wider mb-6">Social</h4>
             <div className="flex flex-col gap-3 text-white/60 font-light">
-              <a href="#" className="hover:text-accent transition-colors w-fit">Instagram</a>
+              <a href="https://www.instagram.com/mvlh_interiors/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors w-fit">Instagram</a>
               <a href="#" className="hover:text-accent transition-colors w-fit">Pinterest</a>
               <a href="#" className="hover:text-accent transition-colors w-fit">Architectural Digest</a>
             </div>

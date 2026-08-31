@@ -332,10 +332,10 @@ export default function Home() {
               {t('home.cta')}
             </Link>
             <a
-              href="tel:+1-631-555-0100"
+              href="tel:+19296001851"
               className="text-white/60 hover:text-white transition-colors font-light text-lg"
             >
-              +1 631 555 0100
+              +1 929 600 1851
             </a>
           </div>
         </FadeIn>

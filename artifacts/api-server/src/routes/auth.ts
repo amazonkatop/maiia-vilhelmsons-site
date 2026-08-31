@@ -8,10 +8,12 @@ import { requireAuth, requireRole, SESSION_COOKIE_NAME } from "../middlewares/au
 const router = Router();
 
 const isProduction = process.env.NODE_ENV === "production";
+// Cross-origin admin UI (e.g. maiia-site.vercel.app → maiia-api.vercel.app)
+// requires SameSite=None; Lax blocks the session cookie on credentialed fetches.
 const cookieOptions = {
   httpOnly: true,
-  secure: isProduction, // requires HTTPS in production (Railway/Render give this by default)
-  sameSite: "lax" as const,
+  secure: isProduction,
+  sameSite: (isProduction ? "none" : "lax") as "none" | "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches token expiry
   path: "/",
 };
@@ -61,7 +63,11 @@ router.post("/auth/login", async (req, res): Promise<void> => {
 
 // POST /auth/logout
 router.post("/auth/logout", (_req, res): void => {
-  res.clearCookie(SESSION_COOKIE_NAME, { path: "/" });
+  res.clearCookie(SESSION_COOKIE_NAME, {
+    path: "/",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+  });
   res.status(204).send();
 });
 

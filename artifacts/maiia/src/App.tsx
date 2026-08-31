@@ -27,11 +27,22 @@ import AdminServices from './pages/admin/services';
 import AdminServiceForm from './pages/admin/service-form';
 import AdminJournal from './pages/admin/journal';
 import AdminJournalForm from './pages/admin/journal-form';
+import { LocaleAdminRedirect } from './components/LocaleAdminRedirect';
+
+const localeAdminPaths = ['/en', '/ru'].flatMap((locale) => [
+  `${locale}/admin`,
+  `${locale}/admin/:p1`,
+  `${locale}/admin/:p1/:p2`,
+  `${locale}/admin/:p1/:p2/:p3`,
+]);
 
 function Router() {
   return (
     <Switch>
       {/* Admin — outside public Layout; default site language remains EN */}
+      {localeAdminPaths.map((path) => (
+        <Route key={path} path={path} component={LocaleAdminRedirect} />
+      ))}
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/homepage" component={AdminHomepage} />
       <Route path="/admin/projects/new" component={AdminProjectForm} />

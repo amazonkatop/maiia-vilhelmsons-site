@@ -51,7 +51,7 @@ const localBusinessJsonLd = {
     'Westhampton Beach',
     'Manhattan',
   ],
-  telephone: '+1-631-555-0100',
+  telephone: '+1-929-600-1851',
   url: canonicalFor('/en'),
 };
 

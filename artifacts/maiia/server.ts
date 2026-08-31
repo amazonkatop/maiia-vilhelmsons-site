@@ -83,6 +83,17 @@ async function createServer() {
     next();
   });
 
+  // Admin lives at /admin/* (no locale prefix).
+  app.use((req, res, next) => {
+    const pathOnly = req.path;
+    const match = pathOnly.match(/^\/(en|ru)(\/admin(?:\/.*)?)$/);
+    if (match) {
+      res.redirect(308, match[2]);
+      return;
+    }
+    next();
+  });
+
   let vite: import('vite').ViteDevServer | undefined;
 
   if (!isProduction) {

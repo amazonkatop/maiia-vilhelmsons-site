@@ -68,8 +68,8 @@ export default function Contact() {
                 <a href="mailto:studio@maiiavilhelmsons.com" className="text-lg hover:text-accent transition-colors block mb-2">
                   studio@maiiavilhelmsons.com
                 </a>
-                <a href="tel:+16315550100" className="text-2xl font-serif hover:text-accent transition-colors block">
-                  +1 631 555 0100
+                <a href="tel:+19296001851" className="text-2xl font-serif hover:text-accent transition-colors block">
+                  +1 929 600 1851
                 </a>
               </div>
 
@@ -78,7 +78,7 @@ export default function Contact() {
                   {locale === 'en' ? 'Follow' : 'Соцсети'}
                 </p>
                 <div className="flex gap-6">
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-lg font-light hover:text-accent transition-colors">
+                  <a href="https://www.instagram.com/mvlh_interiors/" target="_blank" rel="noopener noreferrer" className="text-lg font-light hover:text-accent transition-colors">
                     Instagram
                   </a>
                   <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" className="text-lg font-light hover:text-accent transition-colors">

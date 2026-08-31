@@ -77,8 +77,8 @@ export default function ServiceDetail() {
             <Link href={`/${locale}/contact`} className="inline-block border border-foreground/20 px-8 py-4 text-sm uppercase tracking-widest hover:bg-foreground hover:text-white transition-all duration-500">
               {t('home.cta')}
             </Link>
-            <a href="tel:+1-631-555-0100" className="text-foreground/50 hover:text-accent transition-colors font-light">
-              +1 631 555 0100
+            <a href="tel:+19296001851" className="text-foreground/50 hover:text-accent transition-colors font-light">
+              +1 929 600 1851
             </a>
           </div>
         </FadeIn>

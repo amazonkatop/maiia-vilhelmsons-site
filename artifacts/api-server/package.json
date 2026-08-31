@@ -9,7 +9,9 @@
     "start": "node --enable-source-maps ./dist/index.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "create-admin": "tsx src/scripts/create-first-admin.ts",
-    "seed-projects": "tsx src/scripts/seed-portfolio-projects.ts"
+    "seed-projects": "tsx src/scripts/seed-portfolio-projects.ts",
+    "seed-journal": "tsx src/scripts/seed-journal-posts.ts",
+    "seed-services": "tsx src/scripts/seed-services.ts"
   },
   "dependencies": {
     "@workspace/api-zod": "workspace:*",
