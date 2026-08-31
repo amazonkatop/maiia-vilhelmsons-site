@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import type { Express } from 'express';
-import { createServer } from '../server';
+import { createServer } from '../server.js';
 
 let app: Express | undefined;
 
