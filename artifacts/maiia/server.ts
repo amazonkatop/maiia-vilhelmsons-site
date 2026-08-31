@@ -1,20 +1,13 @@
 import 'dotenv/config';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import express from 'express';
 import type { PageMeta } from './src/lib/seo';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 const rawPort = process.env.PORT;
-if (!rawPort) {
-  throw new Error('PORT environment variable is required but was not provided.');
-}
-const port = Number(rawPort);
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
 
 const base = (process.env.BASE_PATH || '/').replace(/\/$/, '') || '/';
 
@@ -213,10 +206,28 @@ async function createServer() {
   return app;
 }
 
-createServer().then((app) => {
-  const host = process.env.HOST || '0.0.0.0';
-  app.listen(port, host, () => {
-    // eslint-disable-next-line no-console
-    console.log(`SSR server listening on http://${host}:${port} (base: ${base})`);
+export { createServer };
+
+const isVercel = Boolean(process.env.VERCEL);
+const isDirectRun =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) ===
+    path.resolve(fileURLToPath(import.meta.url));
+
+if (!isVercel && isDirectRun) {
+  if (!rawPort) {
+    throw new Error('PORT environment variable is required but was not provided.');
+  }
+  const port = Number(rawPort);
+  if (Number.isNaN(port) || port <= 0) {
+    throw new Error(`Invalid PORT value: "${rawPort}"`);
+  }
+
+  createServer().then((app) => {
+    const host = process.env.HOST || '0.0.0.0';
+    app.listen(port, host, () => {
+      // eslint-disable-next-line no-console
+      console.log(`SSR server listening on http://${host}:${port} (base: ${base})`);
+    });
   });
-});
+}
