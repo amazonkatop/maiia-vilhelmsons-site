@@ -11,8 +11,17 @@ const rawPort = process.env.PORT;
 
 const base = (process.env.BASE_PATH || '/').replace(/\/$/, '') || '/';
 
-const clientOutDir = path.resolve(import.meta.dirname, 'dist/client');
-const serverOutDir = path.resolve(import.meta.dirname, 'dist/server');
+/** dist/ lives next to server.ts locally, or beside vercel-server.mjs on Vercel. */
+function distDir(...segments: string[]) {
+  const root =
+    path.basename(import.meta.dirname) === 'dist'
+      ? import.meta.dirname
+      : path.join(import.meta.dirname, 'dist');
+  return path.resolve(root, ...segments);
+}
+
+const clientOutDir = distDir('client');
+const serverOutDir = distDir('server');
 
 /** Escapes text for safe use inside an HTML attribute or text node. */
 function escapeHtml(s: string): string {

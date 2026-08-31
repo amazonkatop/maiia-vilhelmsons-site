@@ -7,7 +7,7 @@
     "dev": "tsx server.ts",
     "build:client": "vite build --config vite.config.ts --outDir dist/client",
     "build:server": "vite build --config vite.config.ts --ssr src/entry-server.tsx --outDir dist/server",
-    "build": "pnpm run build:client && pnpm run build:server",
+    "build": "pnpm run build:client && pnpm run build:server && node ./build-vercel.mjs",
     "start": "cross-env NODE_ENV=production tsx server.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -59,6 +59,7 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "@workspace/api-client-react": "workspace:*",
+    "esbuild": "0.27.3",
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
     "cmdk": "^1.1.1",
