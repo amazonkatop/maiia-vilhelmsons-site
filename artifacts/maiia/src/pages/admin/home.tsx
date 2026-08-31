@@ -22,6 +22,11 @@ const CARDS = [
     title: 'Journal',
     body: 'Articles and studio notes. Write in English; Russian is auto-translated.',
   },
+  {
+    href: '/admin/contact',
+    title: 'Contact',
+    body: 'Email address for contact form submissions from the public site.',
+  },
 ] as const;
 
 export default function AdminHome() {

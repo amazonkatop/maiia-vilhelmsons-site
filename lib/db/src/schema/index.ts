@@ -4,3 +4,4 @@ export * from "./journal";
 export * from "./leads";
 export * from "./admin-users";
 export * from "./homepage";
+export * from "./contact-settings";

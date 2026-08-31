@@ -9,6 +9,7 @@ const NAV: Array<{ href: string; label: string; exact?: boolean }> = [
   { href: '/admin/projects', label: 'Projects' },
   { href: '/admin/services', label: 'Services' },
   { href: '/admin/journal', label: 'Journal' },
+  { href: '/admin/contact', label: 'Contact' },
 ];
 
 export function AdminShell({ children }: { children: ReactNode }) {

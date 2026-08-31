@@ -27,6 +27,7 @@ import AdminServices from './pages/admin/services';
 import AdminServiceForm from './pages/admin/service-form';
 import AdminJournal from './pages/admin/journal';
 import AdminJournalForm from './pages/admin/journal-form';
+import AdminContact from './pages/admin/contact';
 import { LocaleAdminRedirect } from './components/LocaleAdminRedirect';
 
 const localeAdminPaths = ['/en', '/ru'].flatMap((locale) => [
@@ -54,6 +55,7 @@ function Router() {
       <Route path="/admin/journal/new" component={AdminJournalForm} />
       <Route path="/admin/journal/:slug/edit" component={AdminJournalForm} />
       <Route path="/admin/journal" component={AdminJournal} />
+      <Route path="/admin/contact" component={AdminContact} />
       <Route path="/admin" component={AdminHome} />
 
       {/* Public site */}
