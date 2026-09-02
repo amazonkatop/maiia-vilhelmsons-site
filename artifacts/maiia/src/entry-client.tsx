@@ -3,11 +3,10 @@ import { hydrate } from '@tanstack/react-query';
 import { setBaseUrl } from '@workspace/api-client-react';
 import App from './App';
 import { createQueryClient } from './queryClient';
+import { resolveBrowserApiBaseUrl } from './lib/api-base';
 import './index.css';
 
-// VITE_ prefix required so Vite exposes this to the browser bundle.
-// Falls back to localhost for local dev when unset.
-setBaseUrl(import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080');
+setBaseUrl(resolveBrowserApiBaseUrl());
 
 declare global {
   interface Window {
