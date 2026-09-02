@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { useLocale } from '../contexts/LocaleContext';
 import { PageTransition, FadeIn } from '../components/Animations';
 import { useSubmitLead } from '@workspace/api-client-react';
+import { useSiteContact } from '../hooks/useSiteContact';
+import {
+  localizedContactField,
+  phoneTelHref,
+} from '../lib/contact-settings';
 
 const projectTypes = [
   { value: 'residential', en: 'Residential', ru: 'Жилой' },
@@ -11,6 +16,7 @@ const projectTypes = [
 
 export default function Contact() {
   const { locale, t } = useLocale();
+  const contact = useSiteContact();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -38,6 +44,21 @@ export default function Contact() {
 
   const inputClass = "w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-foreground transition-colors duration-300 font-light placeholder:text-foreground/30";
 
+  const studioAddress = localizedContactField(
+    contact.data,
+    locale,
+    'studioAddress',
+    '23 Jobs Lane, Southampton, NY 11968',
+  );
+  const studioSubtitle = localizedContactField(
+    contact.data,
+    locale,
+    'studioSubtitle',
+    locale === 'en' ? 'By appointment — Hamptons & Manhattan' : 'По записи — Хэмптонс и Манхэттен',
+  );
+  const studioEmail = contact.data?.studioEmail ?? 'studio@maiiavilhelmsons.com';
+  const phone = contact.data?.phone ?? '+1 929 600 1851';
+
   return (
     <PageTransition className="pt-32 pb-32 bg-background min-h-screen">
       <div className="container mx-auto px-6">
@@ -55,9 +76,9 @@ export default function Contact() {
                 <p className="text-xs tracking-[0.3em] uppercase text-accent mb-4">
                   {locale === 'en' ? 'Studio' : 'Студия'}
                 </p>
-                <p className="text-lg mb-1">23 Jobs Lane, Southampton, NY 11968</p>
+                <p className="text-lg mb-1">{studioAddress}</p>
                 <p className="text-lg text-foreground/60">
-                  {locale === 'en' ? 'By appointment — Hamptons & Manhattan' : 'По записи — Хэмптонс и Манхэттен'}
+                  {studioSubtitle}
                 </p>
               </div>
 
@@ -65,11 +86,11 @@ export default function Contact() {
                 <p className="text-xs tracking-[0.3em] uppercase text-accent mb-4">
                   {locale === 'en' ? 'Inquiries' : 'Запросы'}
                 </p>
-                <a href="mailto:studio@maiiavilhelmsons.com" className="text-lg hover:text-accent transition-colors block mb-2">
-                  studio@maiiavilhelmsons.com
+                <a href={`mailto:${studioEmail}`} className="text-lg hover:text-accent transition-colors block mb-2">
+                  {studioEmail}
                 </a>
-                <a href="tel:+19296001851" className="text-2xl font-serif hover:text-accent transition-colors block">
-                  +1 929 600 1851
+                <a href={phoneTelHref(phone)} className="text-2xl font-serif hover:text-accent transition-colors block">
+                  {phone}
                 </a>
               </div>
 
@@ -78,10 +99,10 @@ export default function Contact() {
                   {locale === 'en' ? 'Follow' : 'Соцсети'}
                 </p>
                 <div className="flex gap-6">
-                  <a href="https://www.instagram.com/mvlh_interiors/" target="_blank" rel="noopener noreferrer" className="text-lg font-light hover:text-accent transition-colors">
+                  <a href={contact.data?.followInstagramUrl ?? 'https://www.instagram.com/mvlh_interiors/'} target="_blank" rel="noopener noreferrer" className="text-lg font-light hover:text-accent transition-colors">
                     Instagram
                   </a>
-                  <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" className="text-lg font-light hover:text-accent transition-colors">
+                  <a href={contact.data?.followPinterestUrl ?? '#'} target="_blank" rel="noopener noreferrer" className="text-lg font-light hover:text-accent transition-colors">
                     Pinterest
                   </a>
                 </div>

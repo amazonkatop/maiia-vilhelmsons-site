@@ -141,6 +141,30 @@ const copy = {
         'Запросите консультацию по дизайну интерьера для вашего объекта в Хэмптонс или на Манхэттене.',
     },
   },
+  privacy: {
+    en: {
+      title: 'Privacy Policy | Maiia Vilhelmsons',
+      description:
+        'How Maiia Vilhelmsons Interior Design collects, uses, and protects your personal information.',
+    },
+    ru: {
+      title: 'Политика конфиденциальности | Maiia Vilhelmsons',
+      description:
+        'Как студия Maiia Vilhelmsons собирает, использует и защищает ваши персональные данные.',
+    },
+  },
+  terms: {
+    en: {
+      title: 'Terms of Use | Maiia Vilhelmsons',
+      description:
+        'Terms governing use of the Maiia Vilhelmsons Interior Design website and contact submissions.',
+    },
+    ru: {
+      title: 'Условия использования | Maiia Vilhelmsons',
+      description:
+        'Условия использования сайта студии Maiia Vilhelmsons и отправки обращений через форму.',
+    },
+  },
 } as const;
 
 /**
@@ -281,6 +305,12 @@ export function getPageMeta(
   }
   if (withoutLocale === '/contact') {
     return { ...copy.contact[locale], canonical: canonicalFor(path) };
+  }
+  if (withoutLocale === '/privacy') {
+    return { ...copy.privacy[locale], canonical: canonicalFor(path) };
+  }
+  if (withoutLocale === '/terms') {
+    return { ...copy.terms[locale], canonical: canonicalFor(path) };
   }
 
   // Fallback (404 or unmapped route) — noindex so Google doesn't index junk pages.

@@ -3,10 +3,16 @@ import { Link, useLocation } from 'wouter';
 import { useLocale } from '../contexts/LocaleContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useSiteContact } from '../hooks/useSiteContact';
+import {
+  localizedContactField,
+  phoneTelHref,
+} from '../lib/contact-settings';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
   const { locale, t } = useLocale();
+  const contact = useSiteContact();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -33,6 +39,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
     const newPath = location.replace(/^\/(en|ru)/, `/${newLocale}`);
     setLocation(newPath || `/${newLocale}`);
   };
+
+  const phone = contact.data?.phone ?? '+1 929 600 1851';
+  const studioEmail = contact.data?.studioEmail ?? 'studio@maiiavilhelmsons.com';
+  const footerTagline = localizedContactField(
+    contact.data,
+    locale,
+    'footerTagline',
+    locale === 'en'
+      ? 'An exclusive interior design studio crafting timeless spaces in the Hamptons and Manhattan.'
+      : 'Эксклюзивная студия дизайна интерьера, создающая вневременные пространства в Хэмптонс и на Манхэттене.',
+  );
 
   const navLinks = [
     { href: `/${locale}/portfolio`, label: t('nav.portfolio') },
@@ -64,8 +81,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="hidden lg:flex items-center gap-8">
-            <a href="tel:+19296001851" className="text-sm font-medium hover:text-accent transition-colors duration-300">
-              +1 929 600 1851
+            <a href={phoneTelHref(phone)} className="text-sm font-medium hover:text-accent transition-colors duration-300">
+              {phone}
             </a>
             <button 
               onClick={toggleLocale}
@@ -116,8 +133,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               transition={{ delay: 0.4 }}
               className="mt-auto mb-12 flex flex-col gap-6"
             >
-              <a href="tel:+19296001851" className="text-xl font-serif">
-                +1 929 600 1851
+              <a href={phoneTelHref(phone)} className="text-xl font-serif">
+                {phone}
               </a>
               <button 
                 onClick={toggleLocale}
@@ -139,30 +156,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div>
             <h3 className="font-serif text-2xl tracking-widest uppercase mb-6">Maiia Vilhelmsons</h3>
             <p className="text-white/60 font-light max-w-xs leading-relaxed">
-              {locale === 'en' 
-                ? 'An exclusive interior design studio crafting timeless spaces in the Hamptons and Manhattan.'
-                : 'Эксклюзивная студия дизайна интерьера, создающая вневременные пространства в Хэмптонс и на Манхэттене.'}
+              {footerTagline}
             </p>
           </div>
           <div>
             <h4 className="font-serif text-lg tracking-wider mb-6">Studio</h4>
             <div className="flex flex-col gap-3 text-white/60 font-light">
-              <p>Southampton, NY</p>
-              <p>Manhattan, NY</p>
-              <a href="mailto:studio@maiiavilhelmsons.com" className="hover:text-accent transition-colors w-fit">
-                studio@maiiavilhelmsons.com
+              <p>{contact.data?.footerLocation1 ?? 'Southampton, NY'}</p>
+              <p>{contact.data?.footerLocation2 ?? 'Manhattan, NY'}</p>
+              <a href={`mailto:${studioEmail}`} className="hover:text-accent transition-colors w-fit">
+                {studioEmail}
               </a>
-              <a href="tel:+19296001851" className="hover:text-accent transition-colors w-fit">
-                +1 929 600 1851
+              <a href={phoneTelHref(phone)} className="hover:text-accent transition-colors w-fit">
+                {phone}
               </a>
             </div>
           </div>
           <div>
             <h4 className="font-serif text-lg tracking-wider mb-6">Social</h4>
             <div className="flex flex-col gap-3 text-white/60 font-light">
-              <a href="https://www.instagram.com/mvlh_interiors/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors w-fit">Instagram</a>
-              <a href="#" className="hover:text-accent transition-colors w-fit">Pinterest</a>
-              <a href="#" className="hover:text-accent transition-colors w-fit">Architectural Digest</a>
+              <a href={contact.data?.followInstagramUrl ?? 'https://www.instagram.com/mvlh_interiors/'} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors w-fit">Instagram</a>
+              <a href={contact.data?.followPinterestUrl ?? '#'} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors w-fit">Pinterest</a>
+              <a href={contact.data?.followExtraUrl ?? '#'} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors w-fit">{contact.data?.followExtraLabel ?? 'Architectural Digest'}</a>
             </div>
           </div>
         </div>

@@ -16,6 +16,8 @@ import ServiceDetail from './pages/services/detail';
 import Journal from './pages/journal';
 import JournalDetail from './pages/journal/detail';
 import Contact from './pages/contact';
+import Privacy from './pages/privacy';
+import Terms from './pages/terms';
 
 // Admin (English UI; RU auto-translated on save)
 import AdminLogin from './pages/admin/login';
@@ -74,6 +76,8 @@ function Router() {
             <Route path="/en/journal" component={Journal} />
             <Route path="/en/journal/:slug" component={JournalDetail} />
             <Route path="/en/contact" component={Contact} />
+            <Route path="/en/privacy" component={Privacy} />
+            <Route path="/en/terms" component={Terms} />
 
             <Route path="/ru" component={Home} />
             <Route path="/ru/portfolio" component={Portfolio} />
@@ -84,6 +88,8 @@ function Router() {
             <Route path="/ru/journal" component={Journal} />
             <Route path="/ru/journal/:slug" component={JournalDetail} />
             <Route path="/ru/contact" component={Contact} />
+            <Route path="/ru/privacy" component={Privacy} />
+            <Route path="/ru/terms" component={Terms} />
 
             <Route>
               <div className="min-h-screen flex items-center justify-center bg-background text-center pt-24">

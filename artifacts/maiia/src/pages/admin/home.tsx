@@ -25,7 +25,7 @@ const CARDS = [
   {
     href: '/admin/contact',
     title: 'Contact',
-    body: 'Email address for contact form submissions from the public site.',
+    body: 'Studio details, footer, social links, inquiry email, and legal documents (Privacy & Terms).',
   },
 ] as const;
 
